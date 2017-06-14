@@ -160,7 +160,9 @@ public class FetchHTTPTests extends ProcessorTestBase {
             assertEquals("127.0.0.1", FetchHTTPTest.getLastRequest().getRemoteAddr());
         }
         
-        assertTrue(curi.getNonFatalFailures().isEmpty());
+        if (!exclusions.contains("nonFatalFailuresIsEmpty")) {
+        	assertTrue(curi.getNonFatalFailures().isEmpty());
+        }
     }
 
     // convenience methods to get strings from raw recorded i/o
@@ -326,7 +328,7 @@ public class FetchHTTPTests extends ProcessorTestBase {
         CrawlURI curi = makeCrawlURI("http://localhost:7777/401-no-challenge");
         fetcher().process(curi);
         assertEquals(401, curi.getFetchStatus());
-        runDefaultChecks(curi, "requestLine", "fetchStatus");
+        runDefaultChecks(curi, "requestLine", "fetchStatus","nonFatalFailuresIsEmpty");
     }
     
     protected void checkSetCookieURI() throws URIException, IOException,
@@ -750,9 +752,6 @@ public class FetchHTTPTests extends ProcessorTestBase {
     public void testNoResponse() throws Exception {
         NoResponseServer noResponseServer = new NoResponseServer("localhost", 7780);
         noResponseServer.start();
-
-        // Give the server time to start up:
-        Thread.sleep(1000);
         
         // CrawlURI curi = makeCrawlURI("http://stats.bbc.co.uk/robots.txt");
         CrawlURI curi = makeCrawlURI("http://localhost:7780");
