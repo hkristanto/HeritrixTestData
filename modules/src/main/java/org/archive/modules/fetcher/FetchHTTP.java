@@ -880,9 +880,7 @@ public class FetchHTTP extends Processor implements Lifecycle {
             hcChallengeHeaders = new HashMap<String, Header>();
         }
         if (hcChallengeHeaders.size() < 1) {
-            curi.getNonFatalFailures().add(
-            	new IllegalStateException("Missing auth challenge headers for uri with response status 401: " + curi)
-            );
+            logger.warning("Failed to extract auth challenge headers for uri with response status 401: " + curi);
         }
 
         // reorganize in non-library-specific way

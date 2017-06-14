@@ -160,9 +160,7 @@ public class FetchHTTPTests extends ProcessorTestBase {
             assertEquals("127.0.0.1", FetchHTTPTest.getLastRequest().getRemoteAddr());
         }
         
-        if (!exclusions.contains("nonFatalFailuresIsEmpty")) {
-        	assertTrue(curi.getNonFatalFailures().isEmpty());
-        }
+        assertTrue(curi.getNonFatalFailures().isEmpty());
     }
 
     // convenience methods to get strings from raw recorded i/o
@@ -328,7 +326,7 @@ public class FetchHTTPTests extends ProcessorTestBase {
         CrawlURI curi = makeCrawlURI("http://localhost:7777/401-no-challenge");
         fetcher().process(curi);
         assertEquals(401, curi.getFetchStatus());
-        runDefaultChecks(curi, "requestLine", "fetchStatus","nonFatalFailuresIsEmpty");
+        runDefaultChecks(curi, "requestLine", "fetchStatus");
     }
     
     protected void checkSetCookieURI() throws URIException, IOException,

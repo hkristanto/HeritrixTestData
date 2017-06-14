@@ -62,7 +62,8 @@ public class ExtractorHTTP extends Extractor {
     protected void extract(CrawlURI curi) {
         // discover headers if present
         addHeaderLink(curi, "Location");
-        addContentLocationHeaderLink(curi, "Content-Location");
+        addHeaderLink(curi, "Content-Location");
+
         addRefreshHeaderLink(curi, "Refresh");
 
         // try /favicon.ico for every HTTP(S) URI
@@ -91,19 +92,6 @@ public class ExtractorHTTP extends Extractor {
         }
     }
 
-    protected void addContentLocationHeaderLink(CrawlURI curi, String headerKey) {
-        String headerValue = curi.getHttpResponseHeader(headerKey);
-        if (headerValue != null) {
-            try {
-                UURI dest = UURIFactory.getInstance(curi.getUURI(), headerValue);
-                addOutlink(curi, dest.toString(), LinkContext.INFERRED_MISC, Hop.INFERRED);
-                numberOfLinksExtracted.incrementAndGet();
-            } catch (URIException e) {
-                logUriError(e, curi.getUURI(), headerValue);
-            }
-        }
-    }
-    
     protected void addHeaderLink(CrawlURI curi, String headerName, String url) {
         try {
             UURI dest = UURIFactory.getInstance(curi.getUURI(), url);
