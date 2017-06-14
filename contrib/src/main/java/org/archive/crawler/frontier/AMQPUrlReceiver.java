@@ -153,25 +153,10 @@ public class AMQPUrlReceiver
 
     /**
      * The maximum prefetch count to use, meaning the maximum number of messages
-     * to be consumed without being acknowledged. Use 'null' to specify there
-     * should be no upper limit (the default).
+     * to be consumed without being acknowledged. Using 'null' would specify
+     * there should be no upper limit (the default).
      */
-    private Integer prefetchCount = null;
-
-    /**
-     * @return the prefetchCount
-     */
-    public Integer getPrefetchCount() {
-        return prefetchCount;
-    }
-
-    /**
-     * @param prefetchCount
-     *            the prefetchCount to set
-     */
-    public void setPrefetchCount(Integer prefetchCount) {
-        this.prefetchCount = prefetchCount;
-    }
+    private Integer prefetchCount = 1000;
 
     private transient Lock lock = new ReentrantLock(true);
 
@@ -441,18 +426,8 @@ public class AMQPUrlReceiver
              * https://webarchive.jira.com/wiki/display/Heritrix/Precedence+
              * Feature+Notes
              */
-            if (Hop.INFERRED.getHopString().equals(curi.getLastHop())
-                    || Hop.EMBED.getHopString().equals(curi.getLastHop())) {
+            if (Hop.INFERRED.getHopString().equals(curi.getLastHop())) {
                 curi.setSchedulingDirective(SchedulingConstants.HIGH);
-                curi.setPrecedence(1);
-            } else {
-                /*
-                 * By default, redirects get set to MEDIUM, so to ensure the
-                 * incoming links are caught promptly, even if the crawler hits
-                 * a lot of redirects (which we have observed for e.g. The
-                 * Guardian), we bump them to MEDIUM so these links can compete.
-                 */
-                curi.setSchedulingDirective(SchedulingConstants.MEDIUM);
                 curi.setPrecedence(1);
             }
 
