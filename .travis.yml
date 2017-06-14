@@ -14,7 +14,7 @@ before_install:
  - "echo MAVEN_OPTS=$MAVEN_OPTS"
  - "export _JAVA_OPTIONS=-Xmx1500m"
  - "echo _JAVA_OPTIONS=$_JAVA_OPTIONS"
-
+ 
 script:
  - mvn clean install
  - cd contrib && mvn clean install
